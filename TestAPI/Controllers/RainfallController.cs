@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using RainfallAPI.Services;
 using RainfallAPI.TransformObjects;
-using System.Text.Json;
 
 namespace RainfallAPI.Controllers
 {
@@ -11,23 +9,24 @@ namespace RainfallAPI.Controllers
     public class RainfallController : ControllerBase
     {
         private readonly ProcessAPIResponse _processAPIResponse;
-        public RainfallController(ProcessAPIResponse processAPIResponse) 
+
+        public RainfallController(ProcessAPIResponse processAPIResponse)
         {
-            _processAPIResponse= processAPIResponse;
+            _processAPIResponse = processAPIResponse;
         }
 
         [HttpGet("id/{stationId}/readings")]
-        public async Task<ActionResult> GetReadings(int stationId, [FromQuery] int number)
+        public async Task<ActionResult> GetReadings(int stationId, [FromQuery] int numberOfReadings)
         {
-            if ((number > 10) || (number < 1))
-                return BadRequest(new ErrorResponse { Message = "Parameter should be from 1 to 100"});
+            if ((numberOfReadings > 10) || (numberOfReadings < 100))
+                return BadRequest(new ErrorResponse { Message = "Parameter should be from 1 to 100" });
 
-            var result  = await _processAPIResponse.GetResponse(stationId, number);
+            var result = await _processAPIResponse.GetResponse(stationId, numberOfReadings);
 
             if (result == null)
-                return StatusCode(500,new ErrorResponse { Message = "Internal server error" });
+                return StatusCode(500, new ErrorResponse { Message = "Internal server error" });
 
-            if(result.Readings.Count == 0)
+            if (result.Readings.Count == 0)
                 return NotFound(new ErrorResponse { Message = "No readings found for the specified stationId" });
 
             return Ok(result);

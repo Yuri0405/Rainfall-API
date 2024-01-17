@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace RainfallAPI.TransformObjects
+namespace RainfallAPI.TransformObjects.APIRequestObjects
 {
-    public class RainfallReading
+    public class RainfallReadingReq
     {
         [JsonPropertyName("dateTime")]
         public DateTime DateMeasured { get; set; }
