@@ -18,7 +18,7 @@ namespace RainfallAPI.Controllers
         [HttpGet("id/{stationId}/readings")]
         public async Task<ActionResult> GetReadings(int stationId, [FromQuery] int numberOfReadings)
         {
-            if ((numberOfReadings > 10) || (numberOfReadings < 100))
+            if ((numberOfReadings < 1) || (numberOfReadings > 100))
                 return BadRequest(new ErrorResponse { Message = "Parameter should be from 1 to 100" });
 
             var result = await _processAPIResponse.GetResponse(stationId, numberOfReadings);
